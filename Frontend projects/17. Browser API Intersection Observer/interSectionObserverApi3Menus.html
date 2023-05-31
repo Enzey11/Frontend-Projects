@@ -1,0 +1,137 @@
+3<!DOCTYPE html>
+<html>
+  <head>
+    <title>ScrollSpy</title>
+    <meta charset="UTF-8" />
+      <style>
+      
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 60px;
+  background: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+  padding: 10px;
+  background: white;
+  overflow: hidden;
+}
+
+.navbar-item {
+  text-decoration: none;
+  color: #4a4a4a;
+  display: block;
+  line-height: 1.5;
+  padding: 1.2rem 1.5rem;
+  position: relative;
+}
+
+.container {
+  margin-top: 60px;
+}
+
+.section {
+  height: 100vh;
+}
+
+.section:nth-child(1) {
+  background: #f44336;
+}
+
+.section:nth-child(2) {
+  background: #607d8b;
+}
+
+.section:nth-child(3) {
+  background: #009688;
+}
+
+.section:nth-child(4) {
+  background: #3f51b5;
+}
+
+.active {
+  color: white;
+  background: black;
+ transition: background 0.3s ease-in;
+
+}
+
+      
+      </style>
+      
+  </head>
+  <body>
+<header>
+  <nav class="navbar">
+    <a class="navbar-item active" href="#section1">Section 1</a>
+    <a class="navbar-item" href="#section2">Section 2</a>
+    <a class="navbar-item" href="#section3">Section 3</a>
+    <a class="navbar-item" href="#section4">Section 4</a>
+  </nav>
+</header>
+
+<div class="container">
+  <section class="section" id="section1"></section>
+  <section class="section" id="section2"></section>
+  <section class="section" id="section3"></section>
+  <section class="section" id="section4"></section>
+</div>
+    <script >
+// https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver
+// https://www.hweaver.com/intersection-observer-single-page-navigation/
+// callback in the intersection observer
+        
+let activeScrollSpy = document.querySelector(".active");
+        
+const changeNav = (entries, observer) => {
+	entries.forEach((entry) => {
+		if(entry.isIntersecting && entry.intersectionRatio >= 0.85) {
+           // if you wanna make move right / left the active class for the indicator scroll spy use getBoundingClientRect then divide tht to specific number
+           //remove the active class whenever it's done / leaving the page after intersecting 
+            document.querySelector('.active').classList.remove('active');
+			// get id of the intersecting section
+            // target represent the element that being obeserved by user.
+			const id = entry.target.getAttribute('id');
+			// find matching link & add appropriate class
+            document.querySelector(`a[href="#${id}"]`).classList.add('active');
+		}
+	});
+}
+
+const options = {
+	threshold: 0.85
+}
+
+const observer = new IntersectionObserver(changeNav, options);
+
+// target the elements to be observed
+const sections = document.querySelectorAll('section');
+sections.forEach((section) => {
+    // each of this section has an unique id which will be compared to an anchor tag that has the same id with this section
+	observer.observe(section);
+});
+</script>
+  </body>
+</html>

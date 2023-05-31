@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+        <meta http-equiv="X-UA-Compatible" content = "ie=edge">
+        <title> Keat </title>
+        <style>
+        body {
+          background: #ccc;
+        }
+
+        .calc {
+          width: 272px;
+          margin: 80px auto;
+          background: #4C4C4E;
+          background-image: linear-gradient(to left, #4C4C4E, 95%, #535355, #4C4C4E);
+          padding: 15px;
+          border-radius: 6px;
+          border: 1px solid #2B2B2B;
+
+          box-shadow: 1px 1px 6px rgba(0,0,0,0.7), -1px -1px 6px rgba(0,0,0,0.3);
+        }
+
+        .window {
+          height: 1.5em;
+          line-height: 1.5em;
+          width: 100%;
+          background: #4D5C3D;
+          box-sizing: border-box;
+          border: 2px solid rgba(0, 0, 0, 0.7);
+          border-right-width: 1px;
+          border-bottom-width: 1px;
+          color: #000;
+          text-align: right;
+          padding: 0 10px;
+          margin-bottom: 5px;
+          font-size: 2em;
+          overflow: hidden;
+          border-radius: 6px;
+        }
+
+        .btn {
+          margin: 4px 0 0 0;
+          display: inline-block;
+          width: 64px;
+          height: 50px;
+          background: ;
+          line-height: 46px;
+          text-align: center;
+          border: 0;
+          outline: 0;
+          font-size: 1em;
+          transition: 0.3s ease-in-out;
+          border-radius: 3px;
+
+          background: #99999B;
+
+          color: #fff;
+        }
+
+        .btn:hover {
+          cursor: pointer;
+
+        }
+
+        .btn:active{
+          transform: scale(0.8);
+        }
+
+        .equals {
+          width: 133px;
+        }
+        
+        </style>
+    </head>
+    
+    <body>
+        <div class="calc">
+  <div class="window"></div>
+  <div class="buttons">
+    <button class="btn equals" id="AC">AC</button>
+    <button class="btn" id="CE">CE</button>
+
+    <button class="btn">÷</button>
+    <!--   second row   -->
+    <button class="btn" id="seven">7</button>
+    <button class="btn" id="eight">8</button>
+    <button class="btn" id="nine">9</button>
+    <button class="btn" id="multiply">×</button>
+    <!--   third row   -->
+    <button class="btn" id="">4</button>
+    <button class="btn">5</button>
+    <button class="btn">6</button>
+    <button class="btn">+</button>
+    <!--   fourth row   -->
+    <button class="btn">1</button>
+    <button class="btn">2</button>
+    <button class="btn">3</button>
+    <button class="btn">-</button>
+    <!--   fifth row   -->
+    <button class="btn">0</button>
+    <button class="btn">.</button>
+    <button class="btn equals">=</button>
+      
+      
+  </div>
+<button>cobalt</button>
+</div>
+        <script>
+        /*
+Javascript calculator
+
+*/
+
+// Get dom objects for calculator buttons and screen
+var buttons = document.body.querySelectorAll('.buttons > button');
+var output = document.querySelector('.window');
+
+// Assigned variables
+var operator = ['×', '÷', '-', '+', '%'];
+var input = '';
+var operatorFlag = false;
+var dotFlag = false;
+var equation = '';
+var result = '';
+var i;
+
+
+//Initiate event listener for all buttons objects
+for (i = 0; i < buttons.length; i++) {
+    buttons[i].onclick = function (e) {
+        // this == window object yang merupakan (buttons) sebagai perwakilan yang ada di fungsi buttons.
+        var btnText = this.innerHTML;
+        if (btnText === 'AC') { // clear the screen
+            input = '';
+            operatorFlag = false;
+            equation = '';
+        } else if (btnText === 'CE') { // delete one character
+            input = input.slice(0, input.length - 1);
+
+        } else if (btnText === '.') { // process the dot input
+            if (input.indexOf('.') === -1 || dotFlag) { // only one dot is allowed
+                input += '.';
+                dotFlag = false;
+            }
+        } else if (btnText === '=') { // process the equation when equals button is pressed
+            if (operator.indexOf(input[input.length - 1]) > -1) {
+                input = input.slice(0, input.length - 1);
+            }
+            equation = input.replace(/×/g, '*');
+            equation = equation.replace(/÷/g, '/');
+            result = Math.round(eval(equation)*1000000)/1000000;
+            input = result;
+            operatorFlag = true;
+
+        } else if (operator.indexOf(btnText) > -1) { // process the operator input
+            if (operatorFlag) {
+                input += btnText;
+                operatorFlag = false;
+            } else {
+                input = input.slice(0, input.length - 1) + btnText;
+            }
+            dotFlag = true; // after operator character it is allowed to insert
+                            // another dot in equation
+        } else {
+            if (result !== '' && operator.indexOf(input[input.length - 1]) > -1) {
+                input += btnText;
+                result = '';
+            } else if (result !== '') {
+                input = btnText;
+                result = '';
+            } else {
+                input += btnText;
+            }
+
+            operatorFlag = true;
+        }
+        // print the result on the screen
+        output.innerHTML = input;
+    }
+}
+
+        
+        </script>
+        
+        
+    </body>
+</html>
